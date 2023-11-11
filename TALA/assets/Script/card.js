@@ -1,0 +1,105 @@
+// Learn cc.Class:
+//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/class.html
+// Learn Attribute:
+//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/reference/attributes.html
+// Learn life-cycle callbacks:
+//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/life-cycle-callbacks.html
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {
+        // foo: {
+        //     // ATTRIBUTES:
+        //     default: null,        // The default value will be used only when the component attaching
+        //                           // to a node for the first time
+        //     type: cc.SpriteFrame, // optional, default is typeof default
+        //     serializable: true,   // optional, default is true
+        // },
+        // bar: {
+        //     get () {
+        //         return this._bar;
+        //     },
+        //     set (value) {
+        //         this._bar = value;
+        //     }
+        // },
+        cardStatus: 0, // 0 dang tren tay, 1 san sang , danh bai
+        idCard: 0,
+        type : 1, // tuong ung ro co tep bich
+        value: 1, /// 0 --> 9 and  10 11 12 tuong ung J Q K AT
+        idPlayer:0
+
+        
+    },
+
+    // LIFE-CYCLE CALLBACKS:
+
+    // onLoad () {},
+
+    start() {
+
+    },
+    cardBtn() {
+        console.log(this.cardStatus );
+        this.checkOtherCard();
+
+    },
+    checkOtherCard() {
+        // check xem cac la bai khac co bi select khong
+        const thisIDx = this.idCard;
+        var listCard = this.node.parent.children;
+        for (let i = 0; i < listCard.length; i++) {
+            if (listCard[i].getComponent("card").idCard != thisIDx) {
+                listCard[i].getComponent("card").cardStatus0();
+              //  console.log(listCard[i].getComponent("card").idCard);
+            } else {
+                if( this.cardStatus == 1) this.cardStatus0();
+                else this.cardStatus1();
+             //  console.log(listCard[i].getComponent("card").idCard);
+            }
+
+        }
+    },
+    //ChonLaBai(){
+
+    cardStatus0() { // card notselect
+      //  console.log("x" + this.idCard);
+
+        this.cardStatus = 0;
+        this.node.y = player0123[this.idPlayer].posiCard[1];
+        console.log(this.node.y+"||"+ player0123[this.idPlayer].posiCard[1]);
+    },
+    cardStatus1() { // card sellect
+       // console.log("select" + this.idCard);
+
+        this.cardStatus = 1;
+        this.node.y = player0123[this.idPlayer].posiCard[1]+40;
+        console.log(this.node.y+"||"+player0123[this.idPlayer].posiCard[1] );
+    },
+
+    // danh la bai nay
+    danhBai() {
+        var self = this;
+        let toadoX = self.node.x;
+        let toadoy = self.node.y;
+
+        console.log();
+        if (this.cardStatus == 1) {
+            this.cardStatus = 2;
+            var PlayerM = this.node.parent.parent.getChildByName("PlayerM" + this.idPlayer);
+            var userIcon = cc.instantiate(this.node.parent.parent.parent.getComponent("GamePlayCtrl").card);
+            userIcon.setPosition(toadoX, toadoy)
+            PlayerM.addChild(userIcon);
+
+
+            this.node.active = false;
+
+            self.scheduleOnce(function () {
+                var actionBy = cc.moveTo(2, cc.v2(player0123[this.idPlayer].posiCard[0], player0123[this.idPlayer].posiCardM[1]));
+                userIcon.runAction(actionBy);
+            }, 0.1);
+        }
+    }
+    // update (dt) {},
+});
