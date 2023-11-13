@@ -26,11 +26,11 @@ cc.Class({
         // },
         cardStatus: 0, // 0 dang tren tay, 1 san sang , danh bai
         idCard: 0,
-        type : 1, // tuong ung ro co tep bich
+        type: 1, // tuong ung ro co tep bich
         value: 1, /// 0 --> 9 and  10 11 12 tuong ung J Q K AT
-        idPlayer:0
+        idPlayer: 0// 0,1,2,3,4
 
-        
+
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -38,11 +38,34 @@ cc.Class({
     // onLoad () {},
 
     start() {
+       //this.VeLaBai();
+    },
+    VeLaBai(_valueAll,_idx,_idPlayer){
+        var valueAll = _valueAll;
+        this.type = Math.floor(valueAll/100);
+        this.value = valueAll%100;
+        this.cardStatus = 0;
+        this.idCard = _idx;
+        this.idPlayer = _idPlayer;
+        this.showImgLabai(this.type ,this.value);
+
 
     },
+    showImgLabai(type, value){
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 14; j++) {
+                if(type == (i+1) && value == j) this.node.children[i+1].children[j].active = true;
+                else this.node.children[i+1].children[j].active = false;
+
+            }
+            
+        }
+    },
     cardBtn() {
-        console.log(this.cardStatus );
+        console.log(this.cardStatus);
+     //   if(this.idPlayer == 0){
         this.checkOtherCard();
+        //}
 
     },
     checkOtherCard() {
@@ -52,11 +75,11 @@ cc.Class({
         for (let i = 0; i < listCard.length; i++) {
             if (listCard[i].getComponent("card").idCard != thisIDx) {
                 listCard[i].getComponent("card").cardStatus0();
-              //  console.log(listCard[i].getComponent("card").idCard);
+                //  console.log(listCard[i].getComponent("card").idCard);
             } else {
-                if( this.cardStatus == 1) this.cardStatus0();
+                if (this.cardStatus == 1) this.cardStatus0();
                 else this.cardStatus1();
-             //  console.log(listCard[i].getComponent("card").idCard);
+                //  console.log(listCard[i].getComponent("card").idCard);
             }
 
         }
@@ -64,18 +87,42 @@ cc.Class({
     //ChonLaBai(){
 
     cardStatus0() { // card notselect
-      //  console.log("x" + this.idCard);
+
 
         this.cardStatus = 0;
-        this.node.y = player0123[this.idPlayer].posiCard[1];
-        console.log(this.node.y+"||"+ player0123[this.idPlayer].posiCard[1]);
+        var posix = player0123[this.idPlayer].posiCard[0];
+        var posiy = player0123[this.idPlayer].posiCard[1];
+
+        if (posix == 0) {
+            this.node.y = posiy ;
+        }else{
+            if(posiy==0){
+                this.node.x = posix;
+            }
+        }
     },
     cardStatus1() { // card sellect
-       // console.log("select" + this.idCard);
-
+        // console.log("select" + this.idCard);
+        window.Global.PlayerSelect = this.idPlayer;
         this.cardStatus = 1;
-        this.node.y = player0123[this.idPlayer].posiCard[1]+40;
-        console.log(this.node.y+"||"+player0123[this.idPlayer].posiCard[1] );
+        var posix = player0123[this.idPlayer].posiCard[0];
+        var posiy = player0123[this.idPlayer].posiCard[1];
+        var phuongHuong = 1;
+        if (posix == 0) {
+            if (posiy <= 0) phuongHuong = 1;
+            else phuongHuong = -1;
+
+            this.node.y = posiy + 40 * phuongHuong;
+
+        }else{
+            if(posiy==0){
+                if (posix <= 0) phuongHuong = 1;
+                else phuongHuong = -1;
+    
+                this.node.x = posix + 40 * phuongHuong;
+            }
+        }
+
     },
 
     // danh la bai nay
@@ -96,7 +143,7 @@ cc.Class({
             this.node.active = false;
 
             self.scheduleOnce(function () {
-                var actionBy = cc.moveTo(2, cc.v2(player0123[this.idPlayer].posiCard[0], player0123[this.idPlayer].posiCardM[1]));
+                var actionBy = cc.moveTo(2, cc.v2(player0123[this.idPlayer].posiCardM[0], player0123[this.idPlayer].posiCardM[1]));
                 userIcon.runAction(actionBy);
             }, 0.1);
         }

@@ -7,35 +7,7 @@
 window.Global = {
 
     // vị trí đánh bài trên bàn
-    thisx :  null,
-    viTriCacQuanBaiUser : -260,
-    player : [
-        {
-            name:"Player0",
-            posiCard :[0,-260],
-            rotation:0,
-            posiCardM:[150,0]
-        },
-        {
-            name:"Player1",
-            posiCard :[400,0],
-            rotation:90,
-            posiCardM:[0,130]
-        },
-        {
-            name:"Player2",
-            posiCard :[0,260],
-            rotation:180,
-            posiCardM:[-150,0]
-        },
-        {
-            name:"Player3",
-            posiCard :[-400,0],
-            rotation:-90,
-            posiCardM:[0,-130]
-        },
-
-    ]
+    PlayerSelect: 0
 
     
 

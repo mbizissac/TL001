@@ -34,7 +34,7 @@ cc.Class({
 
     },
     DanhBai(){
-        var getCardPlayer = this.node.getChildByName("Player0");
+        var getCardPlayer = this.node.getChildByName(player0123[window.Global.PlayerSelect].name);
         for (let i = 0; i < getCardPlayer.children.length; i++) {
             let getSelectCard = getCardPlayer.children[i];
             if(getSelectCard.getComponent("card").cardStatus == 1){

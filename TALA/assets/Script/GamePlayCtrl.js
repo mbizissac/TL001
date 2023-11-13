@@ -55,7 +55,36 @@ cc.Class({
             
         }
         console.log(this.allPlayerCard);
+        console.log(this.cardList);
+        this.ChiaBai();
 
+    },
+    ChiaBai(){
+        var CardTable = this.node.getChildByName("CardTable");
+        // xóa hết bài trên bàn
+        for (let i = 0; i < 8; i++) {
+            var playerx = CardTable.children[i];
+            playerx.removeAllChildren(true);
+        }
+        //chia bai
+        for (let i = 0; i < 4; i++) {
+            var playerx = CardTable.children[i*2];
+
+            var cardOf1Player = this.allPlayerCard[i];
+            for (let j = 0; j < cardOf1Player.length; j++) {
+                var posix = player0123[i].posiCard[0];
+                var posiy = player0123[i].posiCard[1];
+    
+                var cardpf = cc.instantiate(this.card);
+                cardpf.setPosition(posix, posiy)
+                cardpf.getComponent("card").VeLaBai(this.allPlayerCard[i][j],j,i );
+                playerx.addChild(cardpf);
+                
+            }
+
+
+
+        }
     }
 
     // update (dt) {},
